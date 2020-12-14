@@ -3,12 +3,16 @@
 @tailwind utilities;
 
 @layer components {
+  .hover-effect {
+    @apply transition ease-out duration-300;
+  }
+  ,
   .nav-active {
-    @apply bg-green-600 text-white;
+    @apply bg-yellow-500 text-white;
   }
   ,
   .nav-inactive {
-    @apply text-gray-300 hover:bg-green-700 hover:text-white;
+    @apply text-gray-300 hover:bg-gray-600 hover:text-white;
   }
   ,
   .nav-set {
@@ -21,5 +25,13 @@
   ,
   .nav-icon {
     @apply p-2 rounded-full;
+  }
+  ,
+  .tooltip .tooltip-text {
+    @apply invisible p-2 absolute z-50 inline-block ml-4 text-xs w-1/2 rounded-lg bg-gray-200 text-black;
+  }
+  ,
+  .tooltip:hover .tooltip-text {
+    @apply visible;
   }
 }

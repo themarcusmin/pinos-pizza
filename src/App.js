@@ -10,7 +10,17 @@ import SettingIcon from "./icons/SettingIcon";
 import MenuOpen from "./icons/MenuOpen";
 import MenuClose from "./icons/MenuClose";
 
+// import firebase from "./firebase";
+
 const App = () => {
+  //   const database = firebase.database();
+  //   console.log(database.ref("pinos-pizza-default-rtdb").on("value", (e) => {
+  //     e.forEach((f) => {
+  //       console.log(f.val());
+  //     })
+  //   }));
+
+
   const [activeNav, setActiveNav] = useState("ordering");
   const [mobileMenu, setMobileMenu] = useState(false);
 
@@ -24,7 +34,7 @@ const App = () => {
 
   return (
     <div className="App">
-      <nav className="bg-green-800">
+      <nav className="bg-black">
         <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
           <div className="relative flex items-center justify-between h-16">
             <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
