@@ -80,14 +80,16 @@ const App = () => {
             <Link to="/logout" onClick={handleNav} id="logout" className={activeNav === "logout" ? "nav-active nav-set-mobile" : "nav-inactive nav-set-mobile"}>Logout</Link>
           </div>
         </div>
-      </nav >
-      <Router>
-        <Ordering path="/ordering" />
-        <Myorders path="/myorders" />
-        <Setting path="/setting" />
-        <Logout path="logout" />
-      </Router>
-    </div >
+      </nav>
+      <div className="h-full w-full">
+        <Router primary={false}>
+          <Ordering path="/ordering" />
+          <Myorders path="/myorders" />
+          <Setting path="/setting" />
+          <Logout path="logout" />
+        </Router>
+      </div>
+    </div>
   );
 };
 

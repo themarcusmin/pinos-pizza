@@ -34,4 +34,66 @@
   .tooltip:hover .tooltip-text {
     @apply visible;
   }
+  ,
+  .menu-button-inactive {
+    @apply hover-effect w-32 transform hover:scale-90 block uppercase m-2 shadow bg-gray-400 hover:bg-yellow-600 active:bg-yellow-700 focus:outline-none text-white text-sm py-3 px-6 rounded;
+  }
+  ,
+  .menu-button-active {
+    @apply hover-effect w-32 transform hover:scale-90 block uppercase m-2 shadow bg-yellow-600 focus:outline-none text-white text-sm py-3 px-6 rounded;
+  }
+  ,
+  /* CSS for ORDERING PAGE */
+  .ordering-container {
+    @apply w-full h-full lg:h-screen flex flex-col;
+  }
+  ,
+  .ordering-structure {
+    @apply flex flex-col md:flex-row flex-grow bg-purple-400 overflow-y-auto;
+  }
+  ,
+  .cart {
+    @apply md:w-5/12 lg:w-1/3 h-full w-full bg-indigo-100 flex flex-col overflow-y-auto;
+  }
+  ,
+  .food-menu {
+    @apply bg-indigo-100 w-full h-full md:w-7/12 lg:w-2/3 overflow-y-auto p-4;
+  }
+  ,
+  /* CSS for Cart Component */
+  .cart-container {
+    @apply select-none sticky top-5 font-mono object-contain bg-white rounded-md h-full lg:h-auto m-4 md:mr-0 p-2 shadow-xl flex inline-flex flex-col justify-start space-y-2;
+  }
+  ,
+  .method-btn-active {
+    @apply hover-effect w-auto focus:outline-none bg-black text-white text-black py-1 px-3;
+  }
+  ,
+  .method-btn-inactive {
+    @apply hover-effect w-auto focus:outline-none bg-gray-300 active:bg-gray-700 hover:bg-black hover:text-white text-black py-1 px-3;
+  }
+  ,
+  .btn-delivery {
+    @apply rounded-l-md border-r border-gray-400;
+  }
+  ,
+  .btn-pickup {
+    @apply rounded-r-md;
+  }
+  ,
+  .svg-operation {
+    @apply w-5 h-5 text-gray-400 cursor-pointer active:text-white transform hover:scale-125 hover:text-red-600 hover-effect;
+  }
+  ,
+  .svg-delete {
+    @apply h-3 cursor-pointer active:text-white transform hover:scale-150 hover:text-red-600 hover-effect;
+  }
+  ,
+  .btn-checkout {
+    @apply justify-self-end text-sm bg-yellow-300 rounded-lg py-1 hover-effect hover:bg-yellow-400 transform hover:scale-95 focus:outline-none;
+  }
+  ,
+  .btn-checkout-disabled {
+    @apply disabled:opacity-50 justify-self-end text-sm bg-yellow-300 rounded-lg py-1 focus:outline-none;
+  }
 }

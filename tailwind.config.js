@@ -2,10 +2,26 @@ module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    // colors: {
-    //   softPearl: "#F0EAE5"
+    // fontSize: {
+    //   'xxs': "0.5rem",
+    //   'xs': '.75rem',
+    //   'sm': '.875rem',
+    //   'tiny': '.875rem',
+    //   'base': '1rem',
+    //   'lg': '1.125rem',
+    //   'xl': '1.25rem',
+    //   '2xl': '1.5rem',
+    //   '3xl': '1.875rem',
+    //   '4xl': '2.25rem',
+    //   '5xl': '3rem',
+    //   '6xl': '4rem',
+    //   '7xl': '5rem',
     // },
     extend: {
+      fontFamily: {
+        'roboto': ['Roboto', 'system-ui']
+      }
+      ,
       backgroundImage: theme => ({
         'pizzaHome': "url('./img/pizza-home.jpg')",
         'settingBG': "url('./img/neon-pizza.jpg')",
@@ -13,15 +29,17 @@ module.exports = {
         'pizzaMBG': "url('./img/pizza-mid.jpg')",
         'pizzaRBG': "url('./img/pizza-right.jpg')",
         'pizzaMobileBG': "url('./img/neon-pizza.jpg')"
-      })
+      }),
     },
   },
   variants: {
     extend: {
       animation: ['hover', 'focus'],
+      opacity: ['disabled'],
       transform: ['hover', 'focus'],
       textColor: ['active'],
       backgroundColor: ['active'],
+      fontStyle: ['hover', 'focus']
     },
   },
   plugins: [

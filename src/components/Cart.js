@@ -1,133 +1,98 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
+import { CartContext } from "../utils/Store";
+
+import Pricing from "./Pricing";
+import CalculatePricing from "./CalculatePricing";
+
+/* Control:
+    - Minimum Qty is 1
+    - Trashcan Icon deletes the item from the state
+    - Checkout is clickable only if there is an item
+*/
+
+/* Function:
+    - Render all items from state
+    - Render pricing based on state
+    - Dispatch for delivery, increment, decrement and remove items
+    - Dispatch pricing details on Checkout button
+*/
 
 const Cart = ({ handleCheckout }) => {
+    const [deliveryMethod, setDeliveryMethod] = useState();
+    const [{ delivery, items }, dispatch] = useContext(CartContext);
+
     return (
-        <div className="select-none sticky top-5 font-mono object-contain bg-white rounded-md h-4/5 m-4 p-2 shadow-xl flex flex-col justify-start space-y-2">
-            <div className="text-xl italic p-2 font-bold">
+        <div className="cart-container">
+            <div className="text-xl text-center italic p-2 font-bold">
                 Your Cart
             </div>
             <div className="flex justify-center">
-                <button type="button" className="hover-effect w-auto focus:outline-none bg-gray-300 hover:bg-black hover:text-white text-black py-1 px-3 rounded-l-md border-r border-gray-400">
+                <button onClick={() => {
+                    setDeliveryMethod("Delivery");
+                    dispatch({ type: "setDelivery", payload: { delivery: true } });
+                }} type="button" className={deliveryMethod === "Delivery" ? "btn-delivery method-btn-active" : "btn-delivery method-btn-inactive"}>
                     Delivery
                 </button>
-                <button type="button" className="hover-effect w-auto focus:outline-none bg-gray-300 hover:bg-black hover:text-white  text-black py-1 px-3 rounded-r-md">
+                <button onClick={() => {
+                    setDeliveryMethod("Pickup");
+                    dispatch({ type: "setDelivery", payload: { delivery: false } });
+                }} type="button" className={deliveryMethod === "Pickup" ? "btn-pickup method-btn-active" : "btn-pickup method-btn-inactive"}>
                     Pickup
                 </button>
             </div>
-            <table className="table-auto border-b border-black">
+            <table className="table-fixed border-b border-black">
                 <thead>
                     <tr className="underline">
-                        <th className="text-sm text-left p-2">Item</th>
-                        <th className="text-sm text-center p-2">Qty</th>
-                        <th className="text-sm text-left p-2">Price</th>
+                        <th className="text-sm text-left p-2 w-7/12">Item</th>
+                        <th className="text-sm text-center p-2 w-2/12">Qty</th>
+                        <th className="text-sm text-center p-2 w-2/12">Price</th>
+                        <th className="w-1/12" />
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td className="text-xs p-2 text-left">Cheese Pizza</td>
-                        <td className="text-xs p-2 text-center">
-                            <div className="flex flex-row w-20 rounded-lg relative bg-transparent mt-1">
-                                <button type="button" data-action="decrement" className="hover-effect bg-gray-400 text-white active:bg-gray-600 hover:bg-black h-full w-20 rounded cursor-pointer focus:outline-none">
-                                    <span className="m-auto text-lg font-thin">−</span>
-                                </button>
-                                <input className="outline-none focus:outline-none text-center w-full font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-gray-700 outline-none" name="custom-input-number" value="0" />
-                                <button type="button" data-action="increment" className="hover-effect bg-gray-400 text-white active:bg-gray-600 hover:bg-black h-full w-20 rounded cursor-pointer focus:outline-none">
-                                    <span className="m-auto text-lg font-thin">+</span>
-                                </button>
-                            </div>
-                        </td>
-                        <td className="text-xs p-2 text-center">12.99</td>
-                        <td>
-                            <svg className="h-3 cursor-pointer active:text-white transform hover:scale-150 hover:text-red-600 hover-effect" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="text-xs p-2 text-left">Sausage, Peppers & Onions</td>
-                        <td className="text-xs p-2 text-center">
-                            <div className="flex flex-row w-20 rounded-lg relative bg-transparent mt-1">
-                                <button type="button" data-action="decrement" className="hover-effect bg-gray-400 text-white active:bg-gray-600 hover:bg-black h-full w-20 rounded cursor-pointer focus:outline-none">
-                                    <span className="m-auto text-lg font-thin">−</span>
-                                </button>
-                                <input className="outline-none focus:outline-none text-center w-full font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-gray-700 outline-none" name="custom-input-number" value="1" />
-                                <button type="button" data-action="increment" className="hover-effect bg-gray-400 text-white active:bg-gray-600 hover:bg-black h-full w-20 rounded cursor-pointer focus:outline-none">
-                                    <span className="m-auto text-lg font-thin">+</span>
-                                </button>
-                            </div>
-                        </td>
-                        <td className="text-xs p-2 text-center">12.99</td>
-                        <td>
-                            <svg className="h-3 cursor-pointer active:text-white transform hover:scale-150 hover:text-red-600 hover-effect" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </td>
-                    </tr>
+                    {
+                        items.map(item => (
+                            <tr key={item.id}>
+                                <td className="text-xs p-2 text-left break-all">{item.name}</td>
+                                <td className="text-xs p-2 text-center">
+                                    <div className="self-center flex flex-row">
+                                        <svg onClick={() => dispatch({ type: 'decrementItem', payload: { id: item.id } })} className="svg-operation" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <div className="text-center md:w-6 w-10 font-semibold text-md text-black">{item.qty}</div>
+                                        <svg onClick={() => dispatch({ type: 'incrementItem', payload: { id: item.id } })} className="svg-operation" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
+                                </td>
+                                <td className="text-xs p-2 text-center">{item.totalPrice.toFixed(2)}</td>
+                                <td>
+                                    <svg onClick={() => dispatch({ type: 'removeItem', payload: { id: item.id } })} className="svg-delete" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </td>
+                            </tr>
+                        ))
+                    }
                 </tbody>
             </table>
-            <table className="text-xs border-b border-black">
-                <tbody>
-                    <tr>
-                        <td className="p-2">Subtotal</td>
-                        <td className="text-right p-2">50.55</td>
-                    </tr>
-                    <tr>
-                        <td className="p-2 flex flex-row">
-                            Delivery Fee
-                        <div className="hover-effect tooltip mx-2 w-4 h-4 bg-gray-300 hover:bg-black hover:text-white cursor-pointer text-center rounded-full">
-                                <span className='tooltip-text bg-blue-200 -mt-1 lg:-mt-8 rounded'>Free delivery on orders above $ 50</span>
-                                !
-                        </div>
-                        </td>
-                        <td className="text-right p-2">Free</td>
-                    </tr>
-                    <tr>
-                        <td className="p-2">Tax</td>
-                        <td className="text-right p-2">5.05</td>
-                    </tr>
-                </tbody>
-            </table>
-            <table className="text-xs">
-                <tbody>
-                    <tr>
-                        <td className="p-2">Total</td>
-                        <td className="text-right p-2">$ 55.60</td>
-                    </tr>
-                </tbody>
-            </table>
-            <button type="button" onClick={handleCheckout} className="justify-self-end text-sm bg-yellow-300 rounded-lg py-1 hover-effect hover:bg-yellow-400 transform hover:scale-95 focus:outline-none">
-                Checkout
-            </button>
-        </div>
+            <Pricing items={items} delivery={delivery} />
+            {items.length ? (
+                <button type="button" onClick={() => {
+                    handleCheckout();
+                    dispatch({ type: 'setPricingDetails', payload: { amount: CalculatePricing(delivery, items) } });
+                }} className="btn-checkout">
+                    Checkout
+                </button>
+            ) : (
+                    <button disabled type="button" className="btn-checkout-disabled">
+                        Checkout
+                    </button>
+                )
+            }
+
+        </div >
     )
 }
 
 export default Cart;
-
-
-// {/* <div className="flex flex-col bg-yellow-300 shadow-xl">
-//     <div>
-//         Your Cart (3 items)
-//             </div>
-//     <table className="table-auto">
-//         <thead>
-//             <tr>
-//                 <th>Item</th>
-//                 <th>Qty</th>
-//                 <th>Price</th>
-//             </tr>
-//         </thead>
-//         <tbody>
-//             <tr>
-//                 <td>Cheese Pizza</td>
-//                 <td>1</td>
-//                 <td>12.99</td>
-//             </tr>
-//             <tr className="bg-blue-200">
-//                 <td>Tuna Subs</td>
-//                 <td>2</td>
-//                 <td>20.50</td>
-//             </tr>
-//         </tbody>
-//     </table>
-// </div> */}

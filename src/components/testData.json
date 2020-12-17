@@ -1,0 +1,182 @@
+{
+  "Dinner Platters": {
+    "Antipasto": {
+      "Large": 75,
+      "Small": 50
+    },
+    "Baked Ziti": {
+      "Large": 65,
+      "Small": 40
+    },
+    "Chicken Parm": {
+      "Large": 85,
+      "Small": 55
+    },
+    "Garden Salad": {
+      "Large": 65,
+      "Small": 40
+    },
+    "Greek Salad": {
+      "Large": 75,
+      "Small": 50
+    },
+    "Meatball Parm": {
+      "Large": 75,
+      "Small": 50
+    }
+  },
+  "Pasta": {
+    "Chicken": 10.25,
+    "Meatballs": 9.25,
+    "Mozzarella": 7
+  },
+  "Pizza": {
+    "Regular": {
+      "1 Topping": {
+        "Large": 20.75,
+        "Small": 14.25
+      },
+      "2 Toppings": {
+        "Large": 22.75,
+        "Small": 15.75
+      },
+      "3 Toppings": {
+        "Large": 24.75,
+        "Small": 16.75
+      },
+      "Cheese": {
+        "Large": 18.75,
+        "Small": 13.25
+      },
+      "Special": {
+        "Large": 26.75,
+        "Small": 18.3
+      }
+    },
+    "Sicilian": {
+      "1 Topping": {
+        "Large": 41.7,
+        "Small": 27.25
+      },
+      "2 Toppings": {
+        "Large": 43.7,
+        "Small": 29.75
+      },
+      "3 Toppings": {
+        "Large": 45.7,
+        "Small": 31.25
+      },
+      "Cheese": {
+        "Large": 39.7,
+        "Small": 25.25
+      },
+      "Special": {
+        "Large": 46.7,
+        "Small": 32.25
+      }
+    }
+  },
+  "PizzaSize": ["Small", "Large"],
+  "PizzaStyle": ["Regular", "Sicilian"],
+  "PizzaTopping": [
+    "Cheese",
+    "1 Topping",
+    "2 Toppings",
+    "3 Toppings",
+    "Special"
+  ],
+  "Salads": {
+    "Antipasto": 8.75,
+    "Garden Salad": 6.75,
+    "Greek Salad": 8.75,
+    "Tuna": 8.75
+  },
+  "Subs": {
+    "Cheese": {
+      "Large": 8.5,
+      "Small": 6.95
+    },
+    "Cheeseburger": {
+      "Large": 7.95,
+      "Small": 5.6
+    },
+    "Chicken Parmigiana": {
+      "Large": 8.95,
+      "Small": 7.95
+    },
+    "Eggplant Parmigiana": {
+      "Large": 8.5,
+      "Small": 6.95
+    },
+    "Fried Chicken": {
+      "Large": 8.95,
+      "Small": 6.95
+    },
+    "Hamburger": {
+      "Large": "7.45",
+      "Small": 5.1
+    },
+    "Hame + Cheese": {
+      "Large": 8.5,
+      "Small": 6.95
+    },
+    "Italian": {
+      "Large": 8.5,
+      "Small": 6.95
+    },
+    "Meatball": {
+      "Large": 8.5,
+      "Small": 6.95
+    },
+    "Sausage, Peppers & Onions": {
+      "Large": 8.95
+    },
+    "Steak": {
+      "Large": 8.5,
+      "Small": 6.85
+    },
+    "Steak + Cheese": {
+      "Large": 9.25,
+      "Small": 7.6
+    },
+    "Tuna": {
+      "Large": 8.5,
+      "Small": 6.95
+    },
+    "Turkey": {
+      "Large": 8.5,
+      "Small": 7.5
+    },
+    "Veggie": {
+      "Large": 8.95,
+      "Small": 6.95
+    }
+  },
+  "Subs-extra": {
+    "Cheese": 0.5,
+    "Green Peppers": 0.5,
+    "Mushrooms": 0.5,
+    "Onions": 0.5
+  },
+  "Toppings": [
+    "Pepperoni",
+    "Sausage",
+    "Mushrooms",
+    "Onions",
+    "Ham",
+    "Canadian Bacon",
+    "Pineapple",
+    "Eggplant",
+    "Tomato & Basil",
+    "Green Peppers",
+    "Hamburger",
+    "Spinach",
+    "Artichoke",
+    "Buffalo Chicken",
+    "Barbeque Chicken",
+    "Anchovies",
+    "Black Olives",
+    "Fresh Garlic",
+    "Zucchini"
+  ]
+}
