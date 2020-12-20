@@ -17,7 +17,7 @@ import CalculatePricing from "./CalculatePricing";
     - Dispatch pricing details on Checkout button
 */
 
-const Cart = ({ handleCheckout }) => {
+const Cart = ({ openModal }) => {
     const [deliveryMethod, setDeliveryMethod] = useState();
     const [{ delivery, items }, dispatch] = useContext(CartContext);
 
@@ -79,7 +79,7 @@ const Cart = ({ handleCheckout }) => {
             <Pricing items={items} delivery={delivery} />
             {items.length ? (
                 <button type="button" onClick={() => {
-                    handleCheckout();
+                    openModal();
                     dispatch({ type: 'setPricingDetails', payload: { amount: CalculatePricing(delivery, items) } });
                 }} className="btn-checkout">
                     Checkout

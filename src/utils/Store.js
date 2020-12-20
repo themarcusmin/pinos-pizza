@@ -4,14 +4,17 @@ import Reducer from "./Reducer";
 const initialCart = {
     delivery: false,
     items: [],
-    amount: {}
+    amount: {},
+    payment: {}
 }
 
 const Store = ({ children }) => {
     const [state, dispatch] = useReducer(Reducer, initialCart);
+
     useEffect(() => {
-        console.log(state);
+        console.log("state changed:", state);
     }, [state])
+
     return (
         <CartContext.Provider value={[state, dispatch]}>
             {children}

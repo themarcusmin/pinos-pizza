@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Cart from "./Cart";
-import Pizza from "./Pizza";
+import PizzaMenu from "./PizzaMenu";
 import PaymentModal from "./PaymentModal";
 
 import Store from "../utils/Store";
@@ -9,27 +9,23 @@ const Ordering = () => {
 
     const [showModal, setModal] = useState(false);
 
-    const handlePayment = () => {
+    const handleModal = () => {
         setModal(!showModal);
     }
-
-    // const handleOrderReceived = (order) => {
-    //     console.log(order);
-    // }
 
     return (
         <Store>
             <div className="ordering-container">
                 <div className="ordering-structure">
                     <div className="cart">
-                        <Cart handleCheckout={handlePayment} />
+                        <Cart openModal={handleModal} />
                     </div>
                     <div className="food-menu">
-                        <Pizza />
+                        <PizzaMenu />
                     </div>
                 </div>
                 {showModal ? (
-                    <PaymentModal handleCheckout={handlePayment} />
+                    <PaymentModal closeModal={handleModal} />
                 ) : null}
             </div>
         </Store>

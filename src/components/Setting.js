@@ -2,7 +2,7 @@ import React from 'react'
 
 const Setting = () => {
     return (
-        <div className="bg-clip-border bg-settingBG bg-contain bg-no-repeat h-screen">
+        <div className="bg-black bg-clip-border bg-settingBG bg-contain bg-no-repeat h-screen">
             <div>Settings</div>
         </div>
     )

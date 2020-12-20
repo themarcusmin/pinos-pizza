@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "@reach/router";
 
 import cart from "../img/cart.svg";
 import truck from "../img/truck.svg";
@@ -9,7 +10,7 @@ const Home = () => {
     return (
         <div className="h-screen w-screen">
             {/* Background */}
-            <div className="relative bg-pizzaHome bg-right-bottom md:bg-bottom bg-cover h-4/5">
+            <div className="relative bg-pizzaHome lg:bg-right bg-right-bottom md:bg-top-right bg-cover h-4/5">
                 {/* Branding */}
                 <div className="absolute flex flex-row m-6 space-x-5">
                     <img className="block h-auto w-auto" src="https://www.pinocchiospizza.net/images/pinocchio_72.gif" alt="Pinocchio" />
@@ -22,8 +23,16 @@ const Home = () => {
                 {/* Login/Register Buttons */}
                 <div className="absolute inset-x-0 bottom-20 flex w-screen justify-center items-center">
                     <div className="flex flex-row space-x-6">
-                        <button type="button" className="w-40 border-yellow-400 border-2 text-white font-base transform hover:scale-105 hover:bg-yellow-400 hover:text-black rounded-full p-2 focus:outline-none transition ease-out duration-500">Login</button>
-                        <button type="button" className="w-40 border-yellow-400 border-2 text-white font-base transform hover:scale-105 hover:bg-yellow-400 hover:text-black rounded-full p-2 focus:outline-none transition ease-out duration-500">Create Account</button>
+                        <Link to="/login">
+                            <button type="button" className="btn-login-create-account">
+                                Login
+                            </button>
+                        </Link>
+                        <Link to="/signup">
+                            <button type="button" className="btn-login-create-account">
+                                Create Account
+                            </button>
+                        </Link>
                     </div>
                 </div>
             </div>

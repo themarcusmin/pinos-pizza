@@ -4,7 +4,9 @@ const ACTIONS = {
     INCREMENT_ITEM: "incrementItem",
     DECREMENT_ITEM: "decrementItem",
     SET_DELIVERY: "setDelivery",
-    SET_PRICING: "setPricingDetails"
+    SET_PRICING: "setPricingDetails",
+    SET_PAYMENT_INFO: "setPaymentInfo",
+    RESET_CART: "resetCart"
 }
 
 // get next Id (source: redux docs)
@@ -52,6 +54,18 @@ const Reducer = (state, action) => {
                 ...state,
                 amount: action.payload.amount
             }
+        case ACTIONS.SET_PAYMENT_INFO:
+            return {
+                ...state,
+                payment: action.payload.payment
+            }
+        case ACTIONS.RESET_CART:
+            return {
+                delivery: false,
+                items: [],
+                amount: {},
+                payment: {}
+            };
         default:
             return state;
     }

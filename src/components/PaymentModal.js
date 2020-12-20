@@ -1,9 +1,11 @@
-import React, { useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import { CartContext } from "../utils/Store";
 
 /* Function:
+    - Store name, maybe address and payment details as state
     - Renders Order Summary: item count, pickup/delivery, total amount due
     - Dispatch delivery address & payment details on Confirm Button
+    - Dispatch state on Confirm button
  */
 
 // Compute total quantity of all items
@@ -18,7 +20,10 @@ const helperDeliveryFee = amt => {
             <td className="text-left">Delivery</td>
             <td className="text-right">
                 {amt ? (
-                    <span className="mx-3">{`$ ${amt}`}</span>
+                    <div>
+                        <span className="mx-3">$</span>
+                        {amt}
+                    </div>
                 ) : (
                         `Free`
                     )}
@@ -47,9 +52,10 @@ const helperPickup = () => {
     )
 }
 
-const PaymentModal = ({ handleCheckout }) => {
-    const [{ items, delivery, amount },] = useContext(CartContext);
-    console.log(amount);
+const PaymentModal = ({ closeModal }) => {
+    const [checkoutData, setCheckoutData] = useState({});
+
+    const [{ items, delivery, amount }, dispatch] = useContext(CartContext);
 
     return (
         <div className="fixed z-10 inset-0 overflow-y-auto">
@@ -112,24 +118,32 @@ const PaymentModal = ({ handleCheckout }) => {
                                         </tbody>
                                     </table>
                                 </div>
-                                <div className="w-full md:w-full px-3 mb-4 text-2xl font-semibold">
-                                    DELIVERY ADDRESS
-                                </div>
+                                {delivery ? (
+                                    <div className="w-full md:w-full px-3 mb-4 text-2xl font-semibold">
+                                        DELIVERY ADDRESS
+                                    </div>
+                                ) : (
+                                        <div className="w-full md:w-full px-3 mb-4 text-2xl font-semibold">
+                                            PICKUP PERSON
+                                        </div>
+                                    )}
                                 <div className="w-full md:w-full px-3 mb-2">
                                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="full-name">
                                         <p className="mb-2">Full Name</p>
-                                        <input id="full-name" className="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" type="text" autoComplete="off" required />
+                                        <input onChange={(e) => setCheckoutData({ ...checkoutData, name: e.target.value })} className="modal-input" type="text" autoComplete="off" required />
                                     </label>
                                 </div>
-                                <div className="w-full md:w-full px-3 mb-2">
-                                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold" htmlFor="address">
-                                        <p className="mb-2">Address</p>
-                                        <input id="address" className="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" type="text" autoComplete="off" required />
-                                    </label>
-                                </div>
+                                {delivery ? (
+                                    <div className="w-full md:w-full px-3 mb-2">
+                                        <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold" htmlFor="address">
+                                            <p className="mb-2">Address</p>
+                                            <input onChange={(e) => setCheckoutData({ ...checkoutData, address: e.target.value })} className="modal-input" type="text" autoComplete="off" required />
+                                        </label>
+                                    </div>
+                                ) : null}
                                 <div className="w-full flex items-center justify-between px-3 mb-2">
                                     <label htmlFor="remember" className="flex items-center w-1/2">
-                                        <input type="checkbox" name="" id="" className="mr-1 bg-white shadow" />
+                                        <input type="checkbox" className="mr-1 bg-white shadow" />
                                         <span className="text-sm text-gray-700 pt-1">Save Address</span>
                                     </label>
                                 </div>
@@ -139,20 +153,31 @@ const PaymentModal = ({ handleCheckout }) => {
                                 <div className="w-full md:w-full px-3">
                                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="address">
                                         <p className="mb-2">Card Number</p>
-                                        <input id="address" className="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" type="password" autoComplete="off" required />
+                                        <input id="address" onChange={(e) => setCheckoutData({ ...checkoutData, cardNumber: e.target.value })} className="modal-input" type="password" autoComplete="off" required />
                                     </label>
                                 </div>
                                 <div className="w-full flex items-center justify-between px-3 mb-2">
                                     <label htmlFor="remember" className="flex items-center w-1/2">
-                                        <input type="checkbox" name="" id="" className="mr-1 bg-white shadow" />
+                                        <input type="checkbox" className="mr-1 bg-white shadow" />
                                         <span className="text-sm text-gray-700 pt-1">Save Card</span>
                                     </label>
                                 </div>
                                 <div className="w-full px-4 sm:px-6 sm:flex sm:flex-row-reverse">
-                                    <button type="button" onClick={handleCheckout} className="hover-effect w-full inline-flex justify-self-end rounded-md border border-transparent shadow-sm px-4 py-2 bg-yellow-300 text-base font-medium text-black transform hover:scale-95 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
-                                        Confirm
-                                    </button>
-                                    <button type="button" onClick={handleCheckout} className="mt-3 w-full inline-flex justify-self-end rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 transform hover:scale-95 focus:outline-none focus:ring-2 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                                    {((delivery && checkoutData.name && checkoutData.address && checkoutData.cardNumber) || (!delivery && checkoutData.name && checkoutData.cardNumber)) ? (
+                                        <button type="button" onClick={() => {
+                                            closeModal();
+                                            dispatch({ type: 'setPaymentInfo', payload: { payment: checkoutData } });
+                                            setCheckoutData({});
+                                            dispatch({ type: 'resetCart' })
+                                        }} className="modal-btn-confirm">
+                                            Confirm
+                                        </button>
+                                    ) : (
+                                            <button disabled type="button" className="modal-btn-confirm-disabled">
+                                                Confirm
+                                            </button>
+                                        )}
+                                    <button type="button" onClick={closeModal} className="modal-btn-cancel">
                                         Cancel
                                     </button>
                                 </div>
