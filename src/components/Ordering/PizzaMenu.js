@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { CartContext } from "../utils/Store";
-import { useMenu } from "../utils/MenuContext";
+import { CartContext } from "../../utils/Store";
+import { useMenu } from "../../utils/MenuContext";
 
 /* Control:
     - Price are only shown if customiseStyle and customiseSize have state
@@ -38,9 +38,16 @@ const PizzaMenu = () => {
 
     const cartReady = ((customiseStyle && customiseSize && customiseToppingAmount && chooseToppings.length === toppingAmount) || (customiseStyle && customiseSize && customiseToppingAmount === "Cheese"));
 
+    // On refresh, redirect to dashboard as menu is null for PizzaMenu component
     useEffect(() => {
-        console.log("test50: menu updated");
-    }, [useMenu])
+        window.onbeforeunload = () => {
+            window.setTimeout(() => {
+                window.location = "/dashboard"
+            })
+            window.onbeforeunload = null;
+        }
+    }, [])
+
     // Choosing pizza topping amount determines the amount of clickable toppings
     const handlePizzaToppingAmtAndPrice = (e) => {
         e.preventDefault();

@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react'
-import { CartContext } from "../utils/Store";
+import React, { useContext } from 'react'
+import { CartContext } from "../../utils/Store";
 
 import Pricing from "./Pricing";
 import CalculatePricing from "./CalculatePricing";
@@ -11,16 +11,14 @@ import CalculatePricing from "./CalculatePricing";
 */
 
 /* Function:
-    - Render all items from state
+    - Render all items, delivery status from state
     - Render pricing based on state
     - Dispatch for delivery, increment, decrement and remove items
     - Dispatch pricing details on Checkout button
 */
 
 const Cart = ({ openModal }) => {
-    const [deliveryMethod, setDeliveryMethod] = useState();
     const [{ delivery, items }, dispatch] = useContext(CartContext);
-
     return (
         <div className="cart-container">
             <div className="text-xl text-center italic p-2 font-bold">
@@ -28,15 +26,13 @@ const Cart = ({ openModal }) => {
             </div>
             <div className="flex justify-center">
                 <button onClick={() => {
-                    setDeliveryMethod("Delivery");
                     dispatch({ type: "setDelivery", payload: { delivery: true } });
-                }} type="button" className={deliveryMethod === "Delivery" ? "btn-delivery method-btn-active" : "btn-delivery method-btn-inactive"}>
+                }} type="button" className={delivery ? "btn-delivery method-btn-active" : "btn-delivery method-btn-inactive"}>
                     Delivery
                 </button>
                 <button onClick={() => {
-                    setDeliveryMethod("Pickup");
                     dispatch({ type: "setDelivery", payload: { delivery: false } });
-                }} type="button" className={deliveryMethod === "Pickup" ? "btn-pickup method-btn-active" : "btn-pickup method-btn-inactive"}>
+                }} type="button" className={!delivery ? "btn-pickup method-btn-active" : "btn-pickup method-btn-inactive"}>
                     Pickup
                 </button>
             </div>
@@ -90,8 +86,7 @@ const Cart = ({ openModal }) => {
                     </button>
                 )
             }
-
-        </div >
+        </div>
     )
 }
 

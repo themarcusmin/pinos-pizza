@@ -1,5 +1,9 @@
-import React, { useState, useContext } from 'react'
-import { CartContext } from "../utils/Store";
+import React, { useState, useEffect, useContext, useRef } from 'react'
+import { useNavigate } from "@reach/router";
+import { CartContext } from "../../utils/Store";
+import { useAuth } from "../../utils/AuthContext";
+import { writeDB } from "../../firebase";
+
 
 /* Function:
     - Store name, maybe address and payment details as state
@@ -53,9 +57,52 @@ const helperPickup = () => {
 }
 
 const PaymentModal = ({ closeModal }) => {
-    const [checkoutData, setCheckoutData] = useState({});
+    const nameRef = useRef();
+    const addressRef = useRef();
+    const cardRef = useRef();
 
+    const navigate = useNavigate();
+    const [error, setError] = useState("");
     const [{ items, delivery, amount }, dispatch] = useContext(CartContext);
+    const { currentUser } = useAuth();
+    const userID = currentUser.uid;
+
+    // On refresh, redirect to dashboard as menu is null for PizzaMenu component
+    useEffect(() => {
+        window.onbeforeunload = () => {
+            window.setTimeout(() => {
+                window.location = "/dashboard"
+            })
+            window.onbeforeunload = null;
+        }
+    }, [])
+
+    async function handleConfirm() {
+        if ((delivery && nameRef.current.value === "" && addressRef.current.value === "" && cardRef.current.value === "") || (!delivery && nameRef.current.value === "" && cardRef.current.value === "")) {
+            return setError("Input Required");
+        }
+        closeModal();
+
+        const paymentInfo = delivery ? ({ name: nameRef.current.value, address: addressRef.current.value, cardNumber: cardRef.current.value }) : ({ name: nameRef.current.value, cardNumber: cardRef.current.value });
+        dispatch({ type: 'setPaymentInfo', payload: { payment: paymentInfo } });
+        await writeDB.ref(`/order-history/${userID}`).push({
+            dateTime: new Date().toUTCString(),
+            items,
+            amount: amount.totalDue,
+            payment: paymentInfo,
+            deliveryMethod: delivery ? "Delivery" : "Store Pickup",
+            status: "Order Received"
+        }, (err) => {
+            if (err) {
+                console.log("Failed to checkout")
+            } else {
+                console.log("Success");
+                dispatch({ type: 'resetCart' });
+                navigate("myorders");
+            }
+        })
+        return null;
+    }
 
     return (
         <div className="fixed z-10 inset-0 overflow-y-auto">
@@ -130,14 +177,14 @@ const PaymentModal = ({ closeModal }) => {
                                 <div className="w-full md:w-full px-3 mb-2">
                                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="full-name">
                                         <p className="mb-2">Full Name</p>
-                                        <input onChange={(e) => setCheckoutData({ ...checkoutData, name: e.target.value })} className="modal-input" type="text" autoComplete="off" required />
+                                        <input ref={nameRef} className="modal-input" type="text" autoComplete="off" required />
                                     </label>
                                 </div>
                                 {delivery ? (
                                     <div className="w-full md:w-full px-3 mb-2">
                                         <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold" htmlFor="address">
                                             <p className="mb-2">Address</p>
-                                            <input onChange={(e) => setCheckoutData({ ...checkoutData, address: e.target.value })} className="modal-input" type="text" autoComplete="off" required />
+                                            <input ref={addressRef} className="modal-input" type="text" autoComplete="off" required />
                                         </label>
                                     </div>
                                 ) : null}
@@ -153,7 +200,7 @@ const PaymentModal = ({ closeModal }) => {
                                 <div className="w-full md:w-full px-3">
                                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="address">
                                         <p className="mb-2">Card Number</p>
-                                        <input id="address" onChange={(e) => setCheckoutData({ ...checkoutData, cardNumber: e.target.value })} className="modal-input" type="password" autoComplete="off" required />
+                                        <input id="address" ref={cardRef} className="modal-input" type="password" autoComplete="off" required />
                                     </label>
                                 </div>
                                 <div className="w-full flex items-center justify-between px-3 mb-2">
@@ -162,21 +209,15 @@ const PaymentModal = ({ closeModal }) => {
                                         <span className="text-sm text-gray-700 pt-1">Save Card</span>
                                     </label>
                                 </div>
+                                {error && (
+                                    <div className="w-full md:w-full px-3 m-3 bg-red-500 text-center text-white p-2 rounded-md">
+                                        {error}
+                                    </div>
+                                )}
                                 <div className="w-full px-4 sm:px-6 sm:flex sm:flex-row-reverse">
-                                    {((delivery && checkoutData.name && checkoutData.address && checkoutData.cardNumber) || (!delivery && checkoutData.name && checkoutData.cardNumber)) ? (
-                                        <button type="button" onClick={() => {
-                                            closeModal();
-                                            dispatch({ type: 'setPaymentInfo', payload: { payment: checkoutData } });
-                                            setCheckoutData({});
-                                            dispatch({ type: 'resetCart' })
-                                        }} className="modal-btn-confirm">
-                                            Confirm
-                                        </button>
-                                    ) : (
-                                            <button disabled type="button" className="modal-btn-confirm-disabled">
-                                                Confirm
-                                            </button>
-                                        )}
+                                    <button type="button" onClick={handleConfirm} className="modal-btn-confirm">
+                                        Confirm
+                                    </button>
                                     <button type="button" onClick={closeModal} className="modal-btn-cancel">
                                         Cancel
                                     </button>
@@ -187,7 +228,7 @@ const PaymentModal = ({ closeModal }) => {
                     {/* </div> */}
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 

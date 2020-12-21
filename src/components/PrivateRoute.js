@@ -6,22 +6,20 @@ import { db } from "../firebase";
 
 /* Function:
     - Renders component only for authenticated users
+    - Loads menu JSON into MenuContext after successful login
  */
 
 export default function PrivateRoute({ component: Component, path: Path }) {
     const { currentUser } = useAuth();
-    const [menu, setMenu] = useMenu();
+    const [, setMenu] = useMenu();
 
     useEffect(() => {
-        console.log(menu);
-        console.log(" menu loaded");
+        console.log("loaded");
         const listener = db.on("value", snap => {
             setMenu(snap.toJSON());
         });
         return () => db.off("value", listener)
-    }, [])
-
-    console.log("test70 from private");
+    }, [setMenu])
 
     return currentUser ? (
         <Component path={Path} />

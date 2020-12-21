@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Router, Link, useNavigate } from "@reach/router";
 import { useAuth } from "../utils/AuthContext";
+import Store from "../utils/Store";
 
-import Ordering from "./Ordering";
+import Ordering from "./Ordering/Ordering";
 import Myorders from "./Myorders";
 import Setting from "./Setting";
 import DashboardHome from "./DashboardHome";
@@ -12,7 +13,6 @@ import MenuOpen from "../icons/MenuOpen";
 import MenuClose from "../icons/MenuClose";
 
 const Dashboard = () => {
-  const [activeNav, setActiveNav] = useState('');
   const [mobileMenu, setMobileMenu] = useState(false);
 
   const [error, setError] = useState("");
@@ -21,8 +21,11 @@ const Dashboard = () => {
   // slice name out of email
   const nameTag = currentUser.email.slice(0, currentUser.email.indexOf("@"));
   // Switch color of Nav Links
-  const handleNav = (e) => {
-    setActiveNav(e.target.id);
+  const activeClass = (route) => {
+    return window.location.pathname === route ? "nav-active nav-set" : "nav-inactive nav-set"
+  }
+  const activeClassMobile = (route) => {
+    return window.location.pathname === route ? "nav-active nav-set-mobile" : "nav-inactive nav-set-mobile"
   }
 
   const handleMobileMenu = () => {
@@ -54,15 +57,15 @@ const Dashboard = () => {
               </button>
             </div>
             <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
-              <Link to="./" onClick={handleNav} className="flex-shrink-0 flex items-center space-x-4">
+              <Link to="./" className="flex-shrink-0 flex items-center space-x-4">
                 <img className="block lg:hidden h-8 w-auto" src="https://www.pinocchiospizza.net/images/pinocchio_72.gif" alt="Pinocchio" />
                 <img className="hidden lg:block h-8 w-auto" src="https://www.pinocchiospizza.net/images/pinocchio_72.gif" alt="Pinocchio" />
                 <div className="text-xl text-white uppercase">Pinocchio&apos;s Pizza</div>
               </Link>
               <div className="hidden sm:block sm:ml-6">
                 <div className="flex space-x-4">
-                  <Link to="ordering" onClick={handleNav} id="ordering" className={activeNav === "ordering" ? "nav-active nav-set" : "nav-inactive nav-set"}>Start Ordering</Link>
-                  <Link to="myorders" onClick={handleNav} id="myorders" className={activeNav === "myorders" ? "nav-active nav-set" : "nav-inactive nav-set"}>My Orders</Link>
+                  <Link to="ordering" id="ordering" className={activeClass("/dashboard/ordering")}>Start Ordering</Link>
+                  <Link to="myorders" id="myorders" className={activeClass("/dashboard/myorders")}> My Orders</Link>
                 </div>
               </div>
             </div>
@@ -74,10 +77,10 @@ const Dashboard = () => {
                       {nameTag}
                     </strong>
                   </div>
-                  <Link to="setting" onClick={handleNav} id="setting" className={activeNav === "setting" ? "nav-active nav-icon" : "nav-inactive nav-icon"}>
+                  <Link to="setting" id="setting" className={activeClass("/dashboard/setting")}>
                     <SettingIcon id="setting" />
                   </Link>
-                  <button type="button" onClick={handleLogout} id="logout" className={activeNav === "logout" ? "nav-active nav-set" : "nav-inactive nav-set"}>Logout</button>
+                  <button type="button" onClick={handleLogout} id="logout" className="nav-inactive nav-set">Logout</button>
                 </div>
               </div>
             </div>
@@ -87,15 +90,15 @@ const Dashboard = () => {
         Open Menu: block, Close Menu: hidden */}
         <div className={mobileMenu ? "block sm:hidden" : "hidden sm:hidden"}>
           <div className="px-2 pt-2 pb-3 space-y-1">
-            <Link to="ordering" onClick={handleNav} id="ordering" className={activeNav === "ordering" ? "nav-active nav-set-mobile" : "nav-inactive nav-set-mobile"}>Start Ordering</Link>
-            <Link to="myorders" onClick={handleNav} id="myorders" className={activeNav === "myorders" ? "nav-active nav-set-mobile" : "nav-inactive nav-set-mobile"}>My Orders</Link>
+            <Link to="ordering" id="ordering" className={activeClassMobile("/dashboard/ordering")}>Start Ordering</Link>
+            <Link to="myorders" id="myorders" className={activeClassMobile("/dashboard/myorders")}>My Orders</Link>
             <div className="nav-inactive nav-set-mobile nav-icon select-none">
               <strong className="text-white">
                 {nameTag}
               </strong>
             </div>
-            <Link to="setting" onClick={handleNav} id="setting" className={activeNav === "setting" ? "nav-active nav-set-mobile" : "nav-inactive nav-set-mobile"}>Setting</Link>
-            <button type="button" onClick={handleLogout} id="logout" className={activeNav === "logout" ? "nav-active nav-set-mobile" : "nav-inactive nav-set-mobile"}>Logout</button>
+            <Link to="setting" id="setting" className={activeClassMobile("/dashboard/setting")}>Setting</Link>
+            <button type="button" onClick={handleLogout} id="logout" className="nav-inactive nav-set">Logout</button>
           </div>
         </div>
       </nav>
@@ -103,12 +106,14 @@ const Dashboard = () => {
         {error ? (
           <div className="block text-center text-red-500 text-lg font-bold bg-yellow-500 py-3">Error here</div>
         ) : null}
-        <Router primary={false}>
-          <DashboardHome default />
-          <Ordering path="ordering" />
-          <Myorders path="myorders" />
-          <Setting path="setting" />
-        </Router>
+        <Store>
+          <Router primary={false}>
+            <DashboardHome default />
+            <Ordering path="ordering" />
+            <Myorders path="myorders" />
+            <Setting path="setting" />
+          </Router>
+        </Store>
       </div>
     </div>
   );

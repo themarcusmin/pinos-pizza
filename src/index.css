@@ -118,4 +118,9 @@
   .modal-btn-cancel {
     @apply mt-3 w-full inline-flex justify-self-end rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 transform hover:scale-95 focus:outline-none focus:ring-2 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm;
   }
+  ,
+  /* CSS for UpdateProfile */
+  .update-profile-btn-confirm {
+    @apply hover-effect w-full inline-flex justify-self-end rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-300 text-base font-medium text-black transform hover:scale-95 hover:bg-blue-600 hover:text-white focus:outline-none focus:ring-2 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm;
+  }
 }

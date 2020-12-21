@@ -92,7 +92,7 @@ const Login = () => {
                 <div className="bg-pizzaMBG md:bg-cover md:w-1/5" />
                 <div className="bg-pizzaRBG md:bg-cover md:w-1/5" />
             </div>
-        </div >
+        </div>
     )
 }
 
