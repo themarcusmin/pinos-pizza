@@ -1,5 +1,9 @@
-import React, { createContext, useReducer, useEffect } from "react";
+import React, { createContext, useReducer } from "react";
 import Reducer from "./Reducer";
+
+/* Function:
+    - This context along with Reducer.js handle all things related to ordering
+ */
 
 const initialCart = {
     delivery: false,
@@ -10,10 +14,6 @@ const initialCart = {
 
 const Store = ({ children }) => {
     const [state, dispatch] = useReducer(Reducer, initialCart);
-
-    useEffect(() => {
-        console.log("state changed:", state);
-    }, [state])
 
     return (
         <CartContext.Provider value={[state, dispatch]}>

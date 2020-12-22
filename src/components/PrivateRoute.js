@@ -14,7 +14,6 @@ export default function PrivateRoute({ component: Component, path: Path }) {
     const [, setMenu] = useMenu();
 
     useEffect(() => {
-        console.log("loaded");
         const listener = db.on("value", snap => {
             setMenu(snap.toJSON());
         });

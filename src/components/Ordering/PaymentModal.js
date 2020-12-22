@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef } from 'react'
+import React, { useState, useContext, useRef } from 'react'
 import { useNavigate } from "@reach/router";
 import { CartContext } from "../../utils/Store";
 import { useAuth } from "../../utils/AuthContext";
@@ -66,16 +66,6 @@ const PaymentModal = ({ closeModal }) => {
     const [{ items, delivery, amount }, dispatch] = useContext(CartContext);
     const { currentUser } = useAuth();
     const userID = currentUser.uid;
-
-    // On refresh, redirect to dashboard as menu is null for PizzaMenu component
-    useEffect(() => {
-        window.onbeforeunload = () => {
-            window.setTimeout(() => {
-                window.location = "/dashboard"
-            })
-            window.onbeforeunload = null;
-        }
-    }, [])
 
     async function handleConfirm() {
         if ((delivery && nameRef.current.value === "" && addressRef.current.value === "" && cardRef.current.value === "") || (!delivery && nameRef.current.value === "" && cardRef.current.value === "")) {

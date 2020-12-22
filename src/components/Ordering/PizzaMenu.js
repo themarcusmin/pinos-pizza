@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import { CartContext } from "../../utils/Store";
 import { useMenu } from "../../utils/MenuContext";
 
@@ -35,27 +35,16 @@ const PizzaMenu = () => {
     // Destructure Menu JSON from MenuContext
     const [menu,] = useMenu();
     const { PizzaStyle, PizzaSize, PizzaTopping, Toppings, ToppingAmount, Pizza } = menu;
-
+    // Toggle Add button based on fulfilling all required pizza style, size, type and/or toppings
     const cartReady = ((customiseStyle && customiseSize && customiseToppingAmount && chooseToppings.length === toppingAmount) || (customiseStyle && customiseSize && customiseToppingAmount === "Cheese"));
 
-    // On refresh, redirect to dashboard as menu is null for PizzaMenu component
-    useEffect(() => {
-        window.onbeforeunload = () => {
-            window.setTimeout(() => {
-                window.location = "/dashboard"
-            })
-            window.onbeforeunload = null;
-        }
-    }, [])
-
     // Choosing pizza topping amount determines the amount of clickable toppings
-    const handlePizzaToppingAmtAndPrice = (e) => {
+    const handlePizzaToppingAmtAndPrice = (e, toppingAmtValue) => {
         e.preventDefault();
         // Updating price and toppingAmount are restricted unless customiseStyle and customiseSize
         if (customiseStyle && customiseSize) {
-            const getPrice = Pizza[customiseStyle][e.target.value][customiseSize];
-            setPizzaData({ ...pizzaData, price: getPrice, customiseToppingAmount: e.target.value, chooseToppings: [], toppingAmount: ToppingAmount[e.target.value] });
-        }
+            setPizzaData({ ...pizzaData, price: Pizza[customiseStyle][toppingAmtValue][customiseSize], customiseToppingAmount: toppingAmtValue, chooseToppings: [], toppingAmount: ToppingAmount[toppingAmtValue] });
+        };
     }
 
     // Select Toppings within the amount of Toppings
@@ -96,6 +85,7 @@ const PizzaMenu = () => {
                 </div>
                 <div className="flex justify-center flex-wrap mb-2">
                     {
+                        PizzaStyle &&
                         Object.entries(PizzaStyle).map(([k, pizza]) => (
                             <button onClick={() => setPizzaData({ ...pizzaData, customiseStyle: pizza })} type="button" key={k} value={pizza} className={customiseStyle === pizza ? "menu-button-active" : "menu-button-inactive"}>{pizza}</button>
                         ))
@@ -106,6 +96,7 @@ const PizzaMenu = () => {
                 </div>
                 <div className="flex justify-center flex-wrap mb-2">
                     {
+                        PizzaSize &&
                         Object.entries(PizzaSize).map(([k, val]) => (
                             <button onClick={() => setPizzaData({ ...pizzaData, customiseSize: val })} type="button" key={k} value={val} className={customiseSize === val ? "menu-button-active" : "menu-button-inactive"}>{val}</button>
                         ))
@@ -116,8 +107,9 @@ const PizzaMenu = () => {
                 </div>
                 <div className="flex justify-center flex-wrap mb-2">
                     {
+                        PizzaTopping &&
                         Object.entries(PizzaTopping).map(([k, val]) => (
-                            <button onClick={handlePizzaToppingAmtAndPrice} key={k} value={val} type="button" className={customiseToppingAmount === val ? "menu-button-active" : "menu-button-inactive"}>
+                            <button onClick={(e) => handlePizzaToppingAmtAndPrice(e, val)} key={k} value={val} type="button" className={customiseToppingAmount === val ? "menu-button-active" : "menu-button-inactive"}>
                                 {val}
                                 <br />
                                 {(customiseStyle && customiseSize) ? (<span className="text-xs">{Pizza[customiseStyle][val][customiseSize].toFixed(2)}</span>) : null}
@@ -132,6 +124,7 @@ const PizzaMenu = () => {
                     </div>
                     <div className="flex justify-center flex-wrap mb-2">
                         {
+                            Toppings &&
                             Object.entries(Toppings).map(([k, topping]) => (
                                 <button onClick={handleToppings} type="button" key={k} value={topping} className={(chooseToppings.includes(topping)) ? "menu-button-active" : "menu-button-inactive"}>
                                     {topping}
