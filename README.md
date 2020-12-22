@@ -1,10 +1,21 @@
+https://pinos-pizza.web.app/
+
 ## Tools Used
 
-Create-React-App
-Tailwindcss
-Firebase Auth
+- Create-React-App
+- Tailwindcss
+- Firebase Auth
+- Firebase Realtime Database
 
-## Thanks to
+## Special Thanks to
 
-Pinocchio's Pizza & Subs
-For menu
+- Pinocchio's Pizza & Subs For Menu
+
+## Features
+
+- Login / Register / Forgot Password
+- Ordering Page
+- Cart Checkout & Payment Form
+- View Order History
+- Update Account Email or Password
+- Logout
